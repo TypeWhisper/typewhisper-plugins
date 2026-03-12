@@ -43,7 +43,13 @@ case "$PLATFORM" in
     mkdir -p "$BUNDLE_DIR/Contents/Resources"
 
     # Find the built dylib (target name may differ from principalClass)
-    DYLIB=$(find "$BUILD_DIR" -maxdepth 1 -name "lib*.dylib" ! -name "libTypeWhisperPluginSDK.dylib" | head -1)
+    DYLIB=""
+    for f in "$BUILD_DIR"/lib*.dylib; do
+      case "$(basename "$f")" in
+        libTypeWhisperPluginSDK.dylib) continue ;;
+        *) DYLIB="$f"; break ;;
+      esac
+    done
     if [ -n "$DYLIB" ]; then
       cp "$DYLIB" "$BUNDLE_DIR/Contents/MacOS/$NAME"
     elif [ -f "$BUILD_DIR/$NAME" ]; then
