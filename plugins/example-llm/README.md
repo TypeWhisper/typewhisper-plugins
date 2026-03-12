@@ -22,3 +22,4 @@ No configuration required. The plugin works out of the box.
 cd src
 swift build
 ```
+
