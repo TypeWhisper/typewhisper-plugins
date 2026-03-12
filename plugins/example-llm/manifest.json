@@ -1,0 +1,14 @@
+{
+  "id": "com.typewhisper.example-llm",
+  "slug": "example-llm",
+  "name": "Example LLM",
+  "author": "TypeWhisper",
+  "version": "1.0.0",
+  "description": "A minimal example LLM plugin demonstrating the TypeWhisperPluginSDK.",
+  "categories": ["llm"],
+  "platforms": ["mac"],
+  "minAppVersion": "1.0.0",
+  "license": "GPL-3.0-only",
+  "principalClass": "ExampleLLMPlugin",
+  "icon": "Sparkles"
+}

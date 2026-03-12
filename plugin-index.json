@@ -1,5 +1,38 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-03-12T00:00:00Z",
-  "plugins": []
+  "generatedAt": "2026-03-12T20:28:45.180Z",
+  "plugins": [
+    {
+      "id": "com.typewhisper.example-llm",
+      "slug": "example-llm",
+      "name": "Example LLM",
+      "author": "TypeWhisper",
+      "authorUrl": null,
+      "version": "1.0.0",
+      "description": "A minimal example LLM plugin demonstrating the TypeWhisperPluginSDK.",
+      "categories": [
+        "llm"
+      ],
+      "platforms": [
+        "mac"
+      ],
+      "minAppVersion": "1.0.0",
+      "license": "GPL-3.0-only",
+      "homepage": null,
+      "sourceUrl": "https://github.com/TypeWhisper/typewhisper-plugins/tree/main/plugins/example-llm",
+      "icon": "Sparkles",
+      "iconUrl": null,
+      "apiDocsUrl": null,
+      "readmeUrl": "https://github.com/TypeWhisper/typewhisper-plugins/raw/main/plugins/example-llm/README.md",
+      "downloads": {
+        "mac": {
+          "url": "https://github.com/TypeWhisper/typewhisper-plugins/releases/download/example-llm-v1.0.0/example-llm-1.0.0-mac.bundle.zip",
+          "sha256": "",
+          "size": 0
+        }
+      },
+      "publishedAt": "2026-03-12T20:28:45.166Z",
+      "principalClass": "ExampleLLMPlugin"
+    }
+  ]
 }
