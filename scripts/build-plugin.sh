@@ -27,7 +27,8 @@ if [ ! -f "$SRC_DIR/Package.swift" ]; then
   exit 1
 fi
 
-DIST_DIR="dist"
+REPO_ROOT="$(pwd)"
+DIST_DIR="$REPO_ROOT/dist"
 mkdir -p "$DIST_DIR"
 
 case "$PLATFORM" in
@@ -90,12 +91,10 @@ case "$PLATFORM" in
 </plist>
 PLIST
 
-    cd -
     OUTPUT="$DIST_DIR/${SLUG}-${VERSION}-mac.bundle.zip"
-    cd "$SRC_DIR"
-    zip -r "../../$OUTPUT" "$BUNDLE_DIR"
+    zip -r "$OUTPUT" "$BUNDLE_DIR"
     rm -rf "$BUNDLE_DIR"
-    cd -
+    cd "$REPO_ROOT"
     echo "Built: $OUTPUT"
     ;;
 
