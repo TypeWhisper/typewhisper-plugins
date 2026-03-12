@@ -42,9 +42,10 @@ case "$PLATFORM" in
     mkdir -p "$BUNDLE_DIR/Contents/MacOS"
     mkdir -p "$BUNDLE_DIR/Contents/Resources"
 
-    # Copy the built dylib
-    if [ -f "$BUILD_DIR/lib${NAME}.dylib" ]; then
-      cp "$BUILD_DIR/lib${NAME}.dylib" "$BUNDLE_DIR/Contents/MacOS/$NAME"
+    # Find the built dylib (target name may differ from principalClass)
+    DYLIB=$(find "$BUILD_DIR" -maxdepth 1 -name "lib*.dylib" ! -name "libTypeWhisperPluginSDK.dylib" | head -1)
+    if [ -n "$DYLIB" ]; then
+      cp "$DYLIB" "$BUNDLE_DIR/Contents/MacOS/$NAME"
     elif [ -f "$BUILD_DIR/$NAME" ]; then
       cp "$BUILD_DIR/$NAME" "$BUNDLE_DIR/Contents/MacOS/$NAME"
     else
