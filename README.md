@@ -1,10 +1,10 @@
 # TypeWhisper Community Plugins
 
-Community-maintained plugins for [TypeWhisper](https://typewhisper.app), the speech-to-text app for macOS.
+Community-maintained plugins for [TypeWhisper](https://typewhisper.com), the speech-to-text app for macOS.
 
 ## Browse Plugins
 
-Visit the [Plugin Catalog](https://typewhisper.app/addons) to discover and download plugins.
+Visit the [Plugin Catalog](https://typewhisper.com/addons) to discover and download plugins.
 
 ## Submit a Plugin
 
@@ -43,9 +43,9 @@ plugins/
 
 ## Resources
 
-- [Plugin SDK Documentation](https://typewhisper.app/addons/develop)
+- [Plugin SDK Documentation](https://typewhisper.com/addons/develop)
 - [TypeWhisperPluginSDK](https://github.com/TypeWhisper/TypeWhisperPluginSDK)
-- [TypeWhisper Website](https://typewhisper.app)
+- [TypeWhisper Website](https://typewhisper.com)
 
 ## License
 

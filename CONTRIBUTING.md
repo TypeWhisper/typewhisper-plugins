@@ -6,7 +6,7 @@ Thank you for building a plugin for TypeWhisper! This guide explains how to subm
 
 - macOS 14.0+ (Sonoma) and Xcode 16+
 - Swift 6.0
-- A working TypeWhisper plugin (see the [SDK docs](https://typewhisper.app/addons/develop))
+- A working TypeWhisper plugin (see the [SDK docs](https://typewhisper.com/addons/develop))
 
 ## Directory Structure
 
@@ -131,7 +131,7 @@ If neither is provided, a default plugin icon is used.
 - CI automatically validates your manifest, checks required files, and compiles your plugin
 - The TypeWhisper team reviews your submission
 - After merge, CI builds your plugin in Release mode and publishes it as a GitHub Release
-- Your plugin appears in the [Plugin Catalog](https://typewhisper.app/addons)
+- Your plugin appears in the [Plugin Catalog](https://typewhisper.com/addons)
 
 ## Updating Your Plugin
 

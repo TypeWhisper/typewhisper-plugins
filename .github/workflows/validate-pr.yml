@@ -7,7 +7,7 @@ on:
 
 jobs:
   validate:
-    runs-on: macos-14
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -16,11 +16,8 @@ jobs:
       - name: Detect changed plugins
         id: changes
         run: |
-          CHANGED=$(git diff --name-only ${{ github.event.pull_request.base.sha }} HEAD -- plugins/ \
-            | cut -d/ -f2 | sort -u)
-          echo "plugins<<EOF" >> $GITHUB_OUTPUT
-          echo "$CHANGED" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          CHANGED=$(git diff --name-only ${{ github.event.pull_request.base.sha }} HEAD -- plugins/ | cut -d/ -f2 | sort -u | tr '\n' ' ')
+          echo "plugins=$CHANGED" >> "$GITHUB_OUTPUT"
           echo "Changed plugins: $CHANGED"
 
       - name: Setup Node.js
@@ -31,12 +28,10 @@ jobs:
       - name: Validate each changed plugin
         run: |
           set -e
-          while IFS= read -r slug; do
-            [ -z "$slug" ] && continue
+          for slug in ${{ steps.changes.outputs.plugins }}; do
             PLUGIN_DIR="plugins/$slug"
             echo "=== Validating $slug ==="
 
-            # Check required files
             for file in manifest.json README.md src/Package.swift LICENSE; do
               if [ ! -f "$PLUGIN_DIR/$file" ]; then
                 echo "ERROR: Missing required file: $PLUGIN_DIR/$file"
@@ -45,10 +40,8 @@ jobs:
             done
             echo "Required files present."
 
-            # Validate manifest
             node scripts/validate-manifest.mjs "$PLUGIN_DIR/manifest.json"
 
-            # Check slug matches directory
             MANIFEST_SLUG=$(python3 -c "import json; print(json.load(open('$PLUGIN_DIR/manifest.json'))['slug'])")
             if [ "$MANIFEST_SLUG" != "$slug" ]; then
               echo "ERROR: Manifest slug '$MANIFEST_SLUG' does not match directory '$slug'"
@@ -56,10 +49,8 @@ jobs:
             fi
             echo "Slug matches directory."
 
-            # Validate icon if present
             if [ -f "$PLUGIN_DIR/icon.png" ]; then
-              DIMENSIONS=$(sips -g pixelWidth -g pixelHeight "$PLUGIN_DIR/icon.png" 2>/dev/null \
-                | grep pixel | awk '{print $2}')
+              DIMENSIONS=$(sips -g pixelWidth -g pixelHeight "$PLUGIN_DIR/icon.png" 2>/dev/null | grep pixel | awk '{print $2}')
               WIDTH=$(echo "$DIMENSIONS" | head -1)
               HEIGHT=$(echo "$DIMENSIONS" | tail -1)
               if [ "$WIDTH" != "256" ] || [ "$HEIGHT" != "256" ]; then
@@ -69,7 +60,6 @@ jobs:
               fi
             fi
 
-            # Check version bump if plugin exists on main
             if git show origin/main:plugins/$slug/manifest.json >/dev/null 2>&1; then
               MAIN_VERSION=$(git show origin/main:plugins/$slug/manifest.json | python3 -c "import json,sys; print(json.load(sys.stdin)['version'])")
               PR_VERSION=$(python3 -c "import json; print(json.load(open('$PLUGIN_DIR/manifest.json'))['version'])")
@@ -80,7 +70,6 @@ jobs:
               echo "Version bumped: $MAIN_VERSION -> $PR_VERSION"
             fi
 
-            # Compile test
             echo "Building $slug..."
             cd "$PLUGIN_DIR/src"
             swift build
@@ -88,5 +77,4 @@ jobs:
             echo "Build successful."
 
             echo "=== $slug validated ==="
-            echo ""
-          done <<< "${{ steps.changes.outputs.plugins }}"
+          done
