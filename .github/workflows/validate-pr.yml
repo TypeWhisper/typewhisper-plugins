@@ -16,7 +16,7 @@ jobs:
       - name: Detect changed plugins
         id: changes
         run: |
-          CHANGED=$(git diff --name-only ${{ github.event.pull_request.base.sha }} HEAD -- plugins/ | cut -d/ -f2 | sort -u | tr '\n' ' ')
+          CHANGED=$(git diff --name-only ${{ github.event.pull_request.base.sha }} HEAD -- plugins/ | cut -d/ -f2 | sort -u | tr '\n' ' ' | xargs)
           echo "plugins=$CHANGED" >> "$GITHUB_OUTPUT"
           echo "Changed plugins: $CHANGED"
 
@@ -26,9 +26,11 @@ jobs:
           node-version: 22
 
       - name: Validate each changed plugin
+        env:
+          CHANGED_PLUGINS: ${{ steps.changes.outputs.plugins }}
         run: |
           set -e
-          for slug in ${{ steps.changes.outputs.plugins }}; do
+          for slug in $CHANGED_PLUGINS; do
             PLUGIN_DIR="plugins/$slug"
             echo "=== Validating $slug ==="
 
@@ -60,7 +62,7 @@ jobs:
               fi
             fi
 
-            if git show origin/main:plugins/$slug/manifest.json >/dev/null 2>&1; then
+            if git show origin/main:plugins/$slug/manifest.json > /dev/null 2>&1; then
               MAIN_VERSION=$(git show origin/main:plugins/$slug/manifest.json | python3 -c "import json,sys; print(json.load(sys.stdin)['version'])")
               PR_VERSION=$(python3 -c "import json; print(json.load(open('$PLUGIN_DIR/manifest.json'))['version'])")
               if [ "$MAIN_VERSION" = "$PR_VERSION" ]; then

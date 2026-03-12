@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "plugins/**"
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -16,20 +17,22 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 2
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Detect changed plugins
         id: changes
         run: |
-          CHANGED=$(git diff --name-only HEAD~1 HEAD -- plugins/ | cut -d/ -f2 | sort -u | tr '\n' ' ')
+          CHANGED=$(git diff --name-only HEAD~1 HEAD -- plugins/ | cut -d/ -f2 | sort -u | tr '\n' ' ' | xargs)
           echo "plugins=$CHANGED" >> "$GITHUB_OUTPUT"
           echo "Changed plugins: $CHANGED"
 
       - name: Build and release changed plugins
         if: steps.changes.outputs.plugins != ''
+        env:
+          CHANGED_PLUGINS: ${{ steps.changes.outputs.plugins }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -e
-          for slug in ${{ steps.changes.outputs.plugins }}; do
+          for slug in $CHANGED_PLUGINS; do
             PLUGIN_DIR="plugins/$slug"
             [ ! -f "$PLUGIN_DIR/manifest.json" ] && continue
 
@@ -56,26 +59,21 @@ jobs:
 
             DESCRIPTION=$(python3 -c "import json; print(json.load(open('$PLUGIN_DIR/manifest.json'))['description'])")
             AUTHOR=$(python3 -c "import json; print(json.load(open('$PLUGIN_DIR/manifest.json'))['author'])")
-            LICENSE=$(python3 -c "import json; print(json.load(open('$PLUGIN_DIR/manifest.json'))['license'])")
+            PLUG_LICENSE=$(python3 -c "import json; print(json.load(open('$PLUGIN_DIR/manifest.json'))['license'])")
 
             ASSETS=""
             for f in dist/${slug}-${VERSION}-*.bundle.zip; do
               [ -f "$f" ] && ASSETS="$ASSETS $f"
             done
 
-            NOTES="$DESCRIPTION
-
-Author: $AUTHOR
-License: $LICENSE"
-
             if [ -n "$ASSETS" ]; then
-              gh release create "$TAG" $ASSETS --title "$slug v$VERSION" --notes "$NOTES"
+              gh release create "$TAG" $ASSETS \
+                --title "$slug v$VERSION" \
+                --notes "$DESCRIPTION - Author: $AUTHOR - License: $PLUG_LICENSE"
             fi
 
             echo "=== Published $slug v$VERSION ==="
           done
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -94,8 +92,9 @@ License: $LICENSE"
           git push
 
       - name: Trigger website rebuild
+        if: steps.changes.outputs.plugins != ''
+        env:
+          GH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
         run: |
           gh api repos/TypeWhisper/typewhisper-web/dispatches \
             -f event_type=release-published
-        env:
-          GH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
