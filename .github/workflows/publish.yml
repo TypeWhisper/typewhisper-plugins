@@ -96,5 +96,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.DISPATCH_TOKEN }}
         run: |
-          gh api repos/TypeWhisper/typewhisper-web/dispatches \
+          gh api repos/TypeWhisper/typewhisper.com/dispatches \
             -f event_type=release-published
