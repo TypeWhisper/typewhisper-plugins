@@ -109,6 +109,7 @@ Your plugin README should include:
 - **Setup** - any configuration steps (API keys, settings, etc.)
 - **Usage** - how users interact with your plugin
 - **Requirements** - external dependencies or accounts needed
+- **Provider access** - for external-provider plugins, the supported auth path users should configure
 
 ## Icon
 
@@ -132,6 +133,22 @@ If neither is provided, a default plugin icon is used.
 - The TypeWhisper team reviews your submission
 - After merge, CI builds your plugin in Release mode and publishes it as a GitHub Release
 - Your plugin appears in the [Plugin Catalog](https://typewhisper.com/addons)
+
+## Provider Access Policy
+
+Catalog submissions that connect to external providers must use access paths the provider authorizes for third-party integrations. Acceptable paths include:
+
+- User-provided API keys or official developer platform billing
+- Officially documented SDK or OAuth flows intended for third-party apps
+- Local-only integrations that do not require provider account impersonation
+
+Catalog plugins must not:
+
+- Impersonate a provider's first-party client
+- Use consumer subscription credentials as API access unless the provider explicitly supports that third-party integration path
+- Rely on unofficial OAuth clients, copied client IDs, hidden endpoints, or token refresh flows intended for another first-party product
+
+If your plugin connects to an external provider, document the supported auth path in your `README.md` so users and reviewers can verify how access is intended to work.
 
 ## Updating Your Plugin
 
