@@ -1,25 +1,17 @@
 # TypeWhisper Community Plugins
 
-Community-maintained plugins for [TypeWhisper](https://typewhisper.com), the speech-to-text app for macOS.
+This repository is retired and will be archived. It was an experiment for a separate community plugin catalog, but TypeWhisper plugin contributions now belong in the platform repositories that own the app integration.
 
-## Browse Plugins
+## Where to Contribute Plugins
 
-Visit the [Plugin Catalog](https://typewhisper.com/addons) to discover and download plugins.
+- macOS plugins: [TypeWhisper/typewhisper-mac](https://github.com/TypeWhisper/typewhisper-mac)
+- Windows plugins: [TypeWhisper/typewhisper-win](https://github.com/TypeWhisper/typewhisper-win)
 
-## Submit a Plugin
+The platform repository is the source of truth for build integration, review, release, and any add-on catalog listing. Please do not open new plugin submissions in this repository.
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed instructions on how to submit your plugin.
+## Historical Structure
 
-**Quick overview:**
-
-1. Fork this repository
-2. Create your plugin directory under `plugins/your-plugin-slug/`
-3. Add `manifest.json`, `README.md`, `LICENSE`, and your Swift source in `src/`
-4. Open a pull request
-5. CI validates your submission automatically
-6. After review and merge, your plugin is built and published
-
-## Repository Structure
+The archived experiment used this layout:
 
 ```
 plugins/

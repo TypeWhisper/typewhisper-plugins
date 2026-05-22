@@ -1,6 +1,15 @@
 # Contributing a Plugin
 
-Thank you for building a plugin for TypeWhisper! This guide explains how to submit your plugin to the community catalog.
+This repository is retired and will be archived. It no longer accepts plugin submissions.
+
+Submit plugins to the platform repository that owns the app integration:
+
+- macOS plugins: [TypeWhisper/typewhisper-mac](https://github.com/TypeWhisper/typewhisper-mac)
+- Windows plugins: [TypeWhisper/typewhisper-win](https://github.com/TypeWhisper/typewhisper-win)
+
+The platform repository is the source of truth for build integration, review, release, and any add-on catalog listing.
+
+The notes below are kept only as historical context for the retired catalog experiment.
 
 ## Prerequisites
 
